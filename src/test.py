@@ -5,12 +5,10 @@ import threading
 import time
 import re
 
-
 class SmartHome:
     def __init__(self, mqtt_username="1852837"):
         self.MQTT_USERNAME = mqtt_username
-        self.topics = ["V1", "V2", "V3", "V9",
-                       "V10", "V12", "V13", "V15", "V16", "V17"]
+        self.topics = ["V1", "V2", "V3", "V9", "V10", "V12", "V13", "V15", "V16", "V17"]
         self.temperature = None
         self.humidity = None
         self.light = None
@@ -23,8 +21,7 @@ class SmartHome:
 
         self.tts_handler = TTSHandler()
         self.assistant = AIAssistant()
-        self.client = MQTTClient(
-            self.MQTT_USERNAME, "", "mqtt.ohstem.vn", 1883, self.topics, self.process_message)
+        self.client = MQTTClient(self.MQTT_USERNAME, "", "mqtt.ohstem.vn", 1883, self.topics, self.process_message)
 
     def process_message(self, client, topic, payload):
         # Process the received message
@@ -62,8 +59,7 @@ class SmartHome:
                                f"Fan speed: {self.fan_speed}, "
                                f"Door: {self.door_status}")
         if self.tts_handler.AI_command:
-            # process AI command that is handled on PC
-            self.process_ai_command(client)
+            self.process_ai_command(client) # process AI command that is handled on PC
 
         if self.voice_result:
             self.ai_response(client)
@@ -135,8 +131,7 @@ class SmartHome:
 
     def ai_response(self, client, text=""):
         if text == "":
-            self.assistant_status = self.assistant_control(
-                self.voice_result, self.assistant_status)
+            self.assistant_status = self.assistant_control(self.voice_result, self.assistant_status)
         print(f"Assistant status: {self.assistant_status}")
 
         if self.assistant_status:
@@ -163,7 +158,6 @@ class SmartHome:
     def run(self):
         while True:
             time.sleep(1)
-
 
 if __name__ == "__main__":
     system = SmartHome()
