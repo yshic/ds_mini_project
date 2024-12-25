@@ -14,19 +14,23 @@ class Light extends Device {
     required super.mqtt_ip,
     required super.mqtt_port,
   }) {
-    // mqttClient.subscribe("V3", (brightness) {
-    //   this.brightness = double.parse(brightness);
-    // });
-    // mqttClient.subscribe("V11", (color) {
-    //   this.color = color;
-    // });
-    // mqttClient.subscribe("V10", (state) {
-    //   if (state == "S") {
-    //     isOn = true;
-    //   } else {
-    //     isOn = false;
-    //   }
-    // });
+    mqttClient.subscribe("V3", (brightness) {
+      this.brightness = double.parse(brightness);
+    });
+    mqttClient.subscribe("V11", (colorString) {
+      String hexColor = colorString.replaceAll("#", "");
+      if (hexColor.length == 6) {
+        hexColor = "FF" + hexColor;
+      }
+      this.color = Color(int.parse("0x$hexColor"));
+    });
+    mqttClient.subscribe("V10", (state) {
+      if (state == "S") {
+        isOn = true;
+      } else {
+        isOn = false;
+      }
+    });
     isOn = true;
     color = Colors.blue;
     brightness = 1;
@@ -41,17 +45,17 @@ class Light extends Device {
       onBrightnessChange: (newBrightness) {
         brightness = newBrightness;
         notifyListeners();
-        // mqttClient.publish("V3", newBrightness.toString());
+        mqttClient.publish("V3", newBrightness.toString());
       },
       onColorChange: (newColor) {
         color = newColor;
         notifyListeners();
-        // mqttClient.publish("V11", newColor.toString());
+        mqttClient.publish("V11", newColor.toString());
       },
       onPowerChange: (newPowerState) {
         isOn = newPowerState;
         notifyListeners();
-        // mqttClient.publish("V10", newPowerState ? "S" : "s");
+        mqttClient.publish("V10", newPowerState ? "S" : "s");
       },
     );
   }
@@ -64,8 +68,7 @@ class Light extends Device {
 
     Widget getIcon(double brightness, Color color) {
     double glowIntensity = brightness.clamp(0.0, 1.0) * 20;
-    Color glowColor = Color.lerp(Colors.white, color, brightness)!.withOpacity(brightness.clamp(0.2, 1.0)); // Interpolate color between white and yellow
-
+    Color glowColor = Color.lerp(Colors.white, color, brightness)!.withOpacity(brightness.clamp(0.2, 1.0)); 
   return Container(
     decoration: BoxDecoration(
       shape: BoxShape.circle,

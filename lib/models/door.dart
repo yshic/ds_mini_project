@@ -9,18 +9,18 @@ class Door extends Device {
     required super.mqtt_ip,
     required super.mqtt_port,
   }) {
-    // mqttClient.subscribe("V9", (message) {
-    //   if (message == "T") {
-    //     isOn = true;
-    //   } else if (message == "t") {
-    //     isOn = false;
-    //   }
-    // });
+    mqttClient.subscribe("V9", (message) {
+      if (message == "T") {
+        isOn = true;
+      } else if (message == "t") {
+        isOn = false;
+      }
+    });
   }
 
   void toggleDoor() {
     isOn = !isOn;
-    // mqttClient.publish("V9", "t");
+    mqttClient.publish("V9", "t");
     notifyListeners();
   }
 

@@ -14,23 +14,23 @@ class Fan extends Device {
     required super.mqtt_ip,
     required super.mqtt_port,
   }) {
-    // mqttClient.subscribe("V1", (temperature) {
-    //   this.temperature = double.parse(temperature);
-    //   notifyListeners()
-    // });
-    // mqttClient.subscribe("V2", (humidity) {
-    //   this.humidity = double.parse(humidity);
-    //   notifyListeners()
-    // });
-    // mqttClient.subscribe("V12", (speed) {
-    //   this.speed = int.parse(speed);
-    //   if (this.speed > 0) {
-    //     isOn = true;
-    //   } else {
-    //     isOn = false;
-    //   }
-    //   notifyListeners()
-    // });
+    mqttClient.subscribe("V1", (temperature) {
+      this.temperature = double.parse(temperature);
+      notifyListeners();
+    });
+    mqttClient.subscribe("V2", (humidity) {
+      this.humidity = double.parse(humidity);
+      notifyListeners();
+    });
+    mqttClient.subscribe("V12", (speed) {
+      this.speed = int.parse(speed);
+      if (this.speed > 0) {
+        isOn = true;
+      } else {
+        isOn = false;
+      }
+      notifyListeners();
+    });
     this.speed = 0;
     this.temperature = 30.0;
     this.humidity = 80.0;
@@ -45,7 +45,7 @@ class Fan extends Device {
       onSpeedChange: (newSpeed) {
         speed = newSpeed;
         notifyListeners();
-        // mqttClient.publish("V12", newSpeed.toString());
+        mqttClient.publish("V12", newSpeed.toString());
       },
     );
   }
