@@ -7,6 +7,7 @@ A new Flutter project.
 1. **Flutter SDK**: Install the Flutter SDK from the [official Flutter website](https://flutter.dev/docs/get-started/install).
 2. **Android Studio**: Install Android Studio, which includes the Android SDK and an Android emulator.
 3. **Android Device**: An Android device with Developer Options and USB Debugging enabled.
+4. **ADB (Android Debug Bridge)**: A versatile command-line tool that allows you to communicate with an Android device. ADB is included with the Android SDK Platform-Tools package.
 
 ## Steps to Set Up
 
@@ -24,9 +25,9 @@ A new Flutter project.
    - Enable USB Debugging. Go to `Settings > Developer options` and enable `USB debugging`.
    - Connect your Android device to your computer via USB.
 
-4. **Verify Flutter Installation**:
+4. **Verify ADB Connection**:
    - Open a terminal or command prompt.
-   - Run `flutter doctor` to verify that Flutter is installed correctly and to check for any missing dependencies. Follow the instructions provided by `flutter doctor` to resolve any issues.
+   - Run the command `adb devices` to list connected devices. You should see your device listed.
 
 5. **Run the Flutter Project**:
    - Open your Flutter project in your preferred IDE (e.g., Android Studio or Visual Studio Code).
