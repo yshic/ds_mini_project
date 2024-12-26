@@ -14,6 +14,7 @@ class Fan extends Device {
     required super.mqtt_ip,
     required super.mqtt_port,
   }) {
+    mqttClient.connect();
     mqttClient.subscribe("V1", (temperature) {
       this.temperature = double.parse(temperature);
       notifyListeners();
