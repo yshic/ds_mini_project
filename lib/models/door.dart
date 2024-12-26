@@ -9,6 +9,7 @@ class Door extends Device {
     required super.mqtt_ip,
     required super.mqtt_port,
   }) {
+    mqttClient.connect();
     mqttClient.subscribe("V9", (message) {
       if (message == "T") {
         isOn = true;
