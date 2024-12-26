@@ -14,6 +14,7 @@ class Light extends Device {
     required super.mqtt_ip,
     required super.mqtt_port,
   }) {
+    mqttClient.connect();
     mqttClient.subscribe("V3", (brightness) {
       this.brightness = double.parse(brightness);
     });
