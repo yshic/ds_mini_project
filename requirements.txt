@@ -1,0 +1,5 @@
+genai
+pyaudio
+keyboard
+paho-mqtt
+gTTS

@@ -11,7 +11,6 @@ class MQTTClient:
         self.topics = topics
         self.message_callback = message_callback
 
-
         self.mqttClient = mqtt.Client()
         self.mqttClient.username_pw_set(self.MQTT_USERNAME, self.MQTT_PASSWORD)
         self.mqttClient.connect(self.MQTT_SERVER, int(self.MQTT_PORT), 60)
@@ -26,25 +25,25 @@ class MQTTClient:
     def mqtt_connected(self, client, userdata, flags, rc):
         print("Connected succesfully!!")
         for topic in self.topics:
-            client.subscribe(self.MQTT_USERNAME + "/feeds/" + topic)
+            client.subscribe(topic)
 
     def mqtt_subscribed(self, client, userdata, mid, granted_qos):
-            print("Subscribed to Topic!!!")
+        print("Subscribed to Topic!!!")
 
     def mqtt_recv_message(self, client, userdata, message):
         payload = message.payload.decode("utf-8")
         topic = message.topic
         self.message_callback(self, topic, payload)
-        
+
     def mqtt_publish(self, topic, payload):
         topic = self.MQTT_USERNAME + "/feeds/" + topic
         self.mqttClient.publish(topic, payload)
 
 
 if __name__ == "__main__":
-    topics = ["V1", "V2", "V3", "V10", "V11", "V12", "V13", "V14", "V15", "V16"]
-    client = MQTTClient("1852837", "", "mqtt.ohstem.vn", 1883, topics)
+    topics = ["yshic/feeds/ai-response", "yshic/feeds/door-control", "yshic/feeds/fan-control", "yshic/feeds/humidity",
+                       "yshic/feeds/led-colors", "yshic/feeds/ledcontrol", "yshic/feeds/light", "yshic/feeds/temperature", "yshic/feeds/voice-recognition"]
+    client = MQTTClient("yshic", "", "io.adafruit.com", 1883, topics)
 
     while True:
         time.sleep(1)
-    
