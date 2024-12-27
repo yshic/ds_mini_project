@@ -7,7 +7,6 @@ import threading
 import time
 import re
 import os
-import keyboard
 
 
 class SmartHome:
