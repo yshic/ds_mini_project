@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'device.dart';
 
 class Light extends Device {
-  late double brightness;
-  late Color color;
+  double? brightness;
+  Color? color;
 
   Light({
     required super.id,
@@ -32,17 +32,14 @@ class Light extends Device {
         isOn = false;
       }
     });
-    isOn = true;
-    color = Colors.blue;
-    brightness = 1;
   }
 
   @override
   Widget getDetailsWidget() {
     return LightDetailsWidget(
-      initialBrightness: brightness,
-      initialColor: color,
-      initialPowerState: isOn,
+      initialBrightness: brightness!,
+      initialColor: color!,
+      initialPowerState: isOn!,
       onBrightnessChange: (newBrightness) {
         brightness = newBrightness;
         notifyListeners();
@@ -59,6 +56,11 @@ class Light extends Device {
         mqttClient.publish("V10", newPowerState ? "S" : "s");
       },
     );
+  }
+
+  @override
+  bool isInitialized() {
+    return brightness != null && color != null && isOn != null;
   }
 
   @override
@@ -110,14 +112,14 @@ class Light extends Device {
               ),
             ),
             const SizedBox(height: 14.0),
-            isOn ? getIcon(brightness, color):getIcon(0, Colors.black),
+            isOn! ? getIcon(brightness!, color!):getIcon(0, Colors.black),
             const SizedBox(height: 14.0),
-            if (isOn) ...[
+            if (isOn!) ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    getColorHex(color),
+                    getColorHex(color!),
                     style: TextStyle(fontSize: 14, color: color, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -134,7 +136,7 @@ class Light extends Device {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    '${(brightness * 100).toInt()}%',
+                    '${(brightness! * 100).toInt()}%',
                     style: const TextStyle(fontSize: 14, color: Colors.yellow, fontWeight: FontWeight.bold),
                   ),
                 ],

@@ -20,9 +20,14 @@ class Door extends Device {
   }
 
   void toggleDoor() {
-    isOn = !isOn;
-    mqttClient.publish("V9", "t");
+    isOn = !isOn!;
+    mqttClient.publish("V9", isOn! ? "T":"t");
     notifyListeners();
+  }
+
+  @override
+  bool isInitialized() {
+    return isOn != null;
   }
 
   @override
@@ -45,7 +50,7 @@ class Door extends Device {
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12.0),
-          color: getDoorColor(isOn),
+          color: getDoorColor(isOn!),
         ),
         child: Center(
           child: Column(
@@ -62,13 +67,13 @@ class Door extends Device {
               ),
               const SizedBox(height: 8.0),
               Icon(
-                getDoorIcon(isOn),
+                getDoorIcon(isOn!),
                 size: 50,
                 color: Colors.white,
               ),
               const SizedBox(height: 8.0),
               Text(
-                isOn ? 'Open' : 'Closed',
+                isOn! ? 'Open' : 'Closed',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.white,
@@ -77,7 +82,7 @@ class Door extends Device {
               ),
               const SizedBox(height: 8.0),
               Text(
-                "Tap to " + (isOn ? "close": "open"),
+                "Tap to " + (isOn! ? "close": "open"),
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold

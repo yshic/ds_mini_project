@@ -47,7 +47,7 @@ class HomePageState extends State<HomePage> {
             value: device,
             child: Consumer<Device>(
               builder: (context, device, child) {
-                return GestureDetector(
+                return device.isInitialized() ? GestureDetector(
                   onTap: device is Door ? device.toggleDoor : () {
                     Navigator.push(
                       context,
@@ -61,12 +61,32 @@ class HomePageState extends State<HomePage> {
                       child: device.getSummaryWidget(),
                     ),
                   ),
-                );
+                ) 
+                : LoadingScreen();
               },
             ),
           );
         },
       ),
+    );
+  }
+}
+
+class LoadingScreen extends StatelessWidget {
+  const LoadingScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[400],
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(Colors.grey[300]),
+            ),
+          ),
     );
   }
 }

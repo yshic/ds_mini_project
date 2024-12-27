@@ -3,7 +3,7 @@ import 'package:smart_home/services/mqtt_client.dart';
 abstract class Device extends ChangeNotifier {
   final String id;
   final String name;
-  late bool isOn;
+  bool? isOn;
   final MqttClient mqttClient;
 
   Device({
@@ -12,11 +12,9 @@ abstract class Device extends ChangeNotifier {
     required String mqtt_username,
     required String mqtt_ip,
     required String mqtt_port,
-  }) : mqttClient = MqttClient(username: mqtt_username, ip: mqtt_ip, port: mqtt_port) 
-  {
-    isOn = false;
-  }
+  }) : mqttClient = MqttClient(username: mqtt_username, ip: mqtt_ip, port: mqtt_port);
 
+  bool isInitialized();
   Widget getDetailsWidget();
   Widget getSummaryWidget();
 }

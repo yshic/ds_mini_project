@@ -3,9 +3,9 @@ import 'package:smart_home/screens/fan_detail_widget.dart';
 
 import 'device.dart';
 class Fan extends Device {
-  late int speed;
-  late double temperature;
-  late double humidity;
+  int? speed;
+  double? temperature;
+  double? humidity;
 
   Fan({
     required super.id,
@@ -25,24 +25,21 @@ class Fan extends Device {
     });
     mqttClient.subscribe("V12", (speed) {
       this.speed = int.parse(speed);
-      if (this.speed > 0) {
-        isOn = true;
-      } else {
-        isOn = false;
-      }
       notifyListeners();
     });
-    this.speed = 0;
-    this.temperature = 30.0;
-    this.humidity = 80.0;
+  }
+
+  @override
+  bool isInitialized() {
+    return speed != null && temperature != null && humidity != null;
   }
 
   @override
   Widget getDetailsWidget() {
     return FanDetailsWidget(
-      speed: speed,
-      temperature: temperature,
-      humidity: humidity,
+      speed: speed!,
+      temperature: temperature!,
+      humidity: humidity!,
       onSpeedChange: (newSpeed) {
         speed = newSpeed;
         notifyListeners();
@@ -106,11 +103,11 @@ class Fan extends Device {
       );
     }
 
-    return Container(
+    Widget wigdet = Container(
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.0),
-        gradient: getGradient(temperature, humidity),
+        gradient: getGradient(temperature!, humidity!),
       ),
       child: Center(
         child: Column(
@@ -119,15 +116,15 @@ class Fan extends Device {
           children: [
             Text(name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
             SizedBox(height: 2.0),
-            getIconByTemp(temperature),
+            getIconByTemp(temperature!),
             SizedBox(height: 1.0),
             Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.speed, size: 24, color: Colors.white),
-                    Text(': ', style: TextStyle(fontSize: 14, color: Colors.white)),
+                    Icon(Icons.speed, size: 24, color:Colors.black),
+                    Text(': ', style: TextStyle(fontSize: 14, color: Colors.black)),
                     SizedBox(width: 3),
-                    Text('$speed', style: TextStyle(fontSize: 14, color: Colors.white)),
+                    Text('$speed', style: TextStyle(fontSize: 14, color: Colors.black)),
                   ],
                 ),
                 SizedBox(height: 1.0),
@@ -154,5 +151,7 @@ class Fan extends Device {
         ),
       ),
     );
+
+    return wigdet;
   }
 }
